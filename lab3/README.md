@@ -61,4 +61,3 @@ These results are calculated over 100 games on average.
 - s296138 Carachino Alessio
 - s301665 Francesco Sorrentino
 - s301793 Francesco Di Gangi
-- s300733 Giuseppe Atanasio
