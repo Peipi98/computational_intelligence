@@ -9,7 +9,7 @@ Create four different agents for the game `Nim`, you can find the full descripti
 ## **Task 3.1**
 
 The hardcoded strategy tries to exploit the number of object we could take depending on the number of `active_rows` left.
-It is more of a late game oriented and it can easily loses versus early game strategy (check `nim-sum` based strategies).
+It is more of a late game oriented and it can easily lose versus early game strategy (check `nim-sum` based strategies).
 
 Here is the workflow of the algorithm:
 ```
@@ -27,7 +27,7 @@ Here is the workflow of the algorithm:
 It tries to tune three parameters:
 1) **alpha**: it is employed until 'mid-game' finishes. It tries to guide the choice of `num_objects`.
 2) **beta**: employed only in 'end-game'. It tries to guide the choice of `num_objects`.
-3) **gamma**: employed only in 'eng-game'. It guides whether picking a row with `num_objects` over the average (otherwise below).
+3) **gamma**: employed only in 'end-game'. It guides whether picking a row with `num_objects` over the average (otherwise below).
 
 ### **Strategy 1**
 The idea behind this strategy is to use the parameters `alpha` and `beta` to tune the two part of the strategy:
@@ -42,22 +42,38 @@ The two branches of this strategy exploit the hard-coded strategy in `Task 3.1` 
 In the end it can achieves 100% winrate over 100 games versus the `pure_random`, and the average win rate is 95%.
 It doesn't beat the `optimal_strategy` and that makes sense because we don't exploit `xor` operations or `nim-sum`.
 
+### **Strategy 2**
+There are four parameters in this case.
+
+The concept is computing a different accumulation operation (and - or - xor),
+randomly picked according to the weight parameters (alpha - beta - gamma).
+The 'percentage' parameter is employed to choose how many objects must be selected.
+
+The choice is made initializing (with 'percentage')
+an array sorted with a lambda where the elements are put in the array according to their distance from the num_objects of the
+longest row; 'perc' determines how much the points must be distant from the longest_row.
+
+After some generations, it will learn to exploit xor only (and it retrieves the optimal-strategy).
+
 # **Results**
 
 These results are calculated over 100 games on average.
 
-| **Strategy** | **Opponent strategy** | **Average Win Rate %** |
-|-------|--------------------|---|
-| hard_coded_strategy     | gabriele                  | 100% |
-| hard_coded_strategy      | pure random                  | 90% |
-| strategy_0     | gabriele                  | 85% |
-| strategy_0     | pure random                  | 45%  |
-| strategy_1     | gabriele                  | 100% |
-| strategy_1     | pure random                  | 97% |
-| strategy_1 | strategy_0 | 80% |
+| **Strategy**        | **Opponent strategy** | **Average Win Rate %** |
+|---------------------|-----------------------|------------------------|
+| hard_coded_strategy | gabriele              | 100%                   |
+| hard_coded_strategy | pure random           | 90%                    |
+| strategy_0          | gabriele              | 85%                    |
+| strategy_0          | pure random           | 45%                    |
+| strategy_1          | gabriele              | 100%                   |
+| strategy_1          | pure random           | 97%                    |
+| strategy_2          | gabriele              | 98%                    |
+| strategy_2          | pure random           | 98%                    |
+| strategy_1          | strategy_0            | 80%                    |
 
 
 # **Collaborators**
 - s296138 Carachino Alessio
 - s301665 Francesco Sorrentino
 - s301793 Francesco Di Gangi
+- s300733 Giuseppe Atanasio
