@@ -55,6 +55,29 @@ longest row; 'perc' determines how much the points must be distant from the long
 
 After some generations, it will learn to exploit xor only (and it retrieves the optimal-strategy).
 
+## Task 3.4 - Reinforcement Learning
+We have considered Q-learning and we have taken inspiration to bblais' Game setups.
+
+Our accuracies are sampled and calculated for each 100 games.
+
+We have used three hyperparameters:
+- `alpha`: learning rate
+- `gamma`: memory multiplicator
+- `epsilon`: the chance of making a random move
+
+|`alpha`|`gamma`|`epsilon`|
+|-------|-------|---------|
+|  0.3  |  0.9  |   0.1   |
+
+Despite of the previous methods, this requires many iteration to reach a sort of convergence. That's why we have iterated among 5000 games, and we have reached a suboptimal result against `gabriele` of 98% after 3500 iterations.
+
+For what concerns our RL agent against `optimal_strategy`, there is a plateau due to continue loses of our agent, but this situation changes after almost 3kth iteration. 
+It has turned out that for 10k iterations the max accuracy still increases, so we enhanced the iterations up to 30k and we obtained a max winrate of 81% after 28100 iterations. 
+
+Please note: these values are mutable and they have to be considered as an approximation.
+
+References: [Bblais'Game](https://github.com/bblais/Game)
+
 # **Results**
 
 These results are calculated over 100 games on average.
@@ -71,6 +94,11 @@ These results are calculated over 100 games on average.
 | strategy_2          | pure random           | 98%                    |
 | strategy_1          | strategy_0            | 80%                    |
 
+Results for Q-learning agent:
+| **Opponent strategy** | **Average Win Rate %** | **Average iterations** |
+|-----------------------|------------------------|------------------------|
+| gabriele              | 98%                    | 3500                   |
+| pure random           | 81%                    | 28100                  |
 
 # **Collaborators**
 - s296138 Carachino Alessio
