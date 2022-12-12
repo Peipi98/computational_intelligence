@@ -136,10 +136,10 @@ We have used three hyperparameters:
 |---------|---------|-----------|
 | 0.3     | 0.9     | 0.1       |
 
-Despite the previous methods, this requires many iteration to reach a sort of convergence. That's why we have iterated among 5000 games, and we have reached a suboptimal result against `gabriele` of 98% after 3500 iterations, even if it is unstable.
+Despite the previous methods, this requires many iteration to reach a sort of convergence. That's why we have iterated among 5000 games, and we have reached a suboptimal result against `gabriele` of 99% after 20600 iterations, even if it is unstable.
 
 For what concerns our RL agent against `optimal_strategy`, there is a plateau due to continue loses of our agent, but this situation changes after almost 3kth iteration. 
-It has turned out that for 10k iterations the max accuracy still increases, so we enhanced the iterations up to 30k and we obtained a max winrate of 81% after 28100 iterations. 
+It has turned out that for 10k iterations the max accuracy still increases, so we enhanced the iterations up to 30k and we obtained a max winrate of 84% after 20200 iterations. 
 
 After that, we wanted to test again our agent against `gabriele` using pretrained data from previous training against `optimal_strategy`, and the curve is significantly improved at the beginning.
 
