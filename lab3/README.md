@@ -1,4 +1,4 @@
-# Lab 3 - Giuseppe Atanasio
+# Lab 3 - Alessio Carachino
 
 You can find the solution in the `taskN_lib` for each task.
 
@@ -6,7 +6,7 @@ You can find the solution in the `taskN_lib` for each task.
 
 Create four different agents for the game `Nim`, you can find the full description in `lab3_nim.ipynb`
 
-## **Task 3.1**
+## **Task 3.1 - Hard-coded rules-based strategy**
 
 The hardcoded strategy tries to exploit the number of object we could take depending on the number of `active_rows` left.
 It is more of a late game oriented and it can easily lose versus early game strategy (check `nim-sum` based strategies).
@@ -21,7 +21,7 @@ Here is the workflow of the algorithm:
         take all objects from a random row
 ```
 
-## **Task 3.2** 
+## **Task 3.2 - Genetic Algorithm-based strategies** 
 
 ### **Strategy 0**
 It tries to tune three parameters:
@@ -55,29 +55,99 @@ longest row; 'perc' determines how much the points must be distant from the long
 
 After some generations, it will learn to exploit xor only (and it retrieves the optimal-strategy).
 
+## **Task 3.3 MinMax strategy**
+
+Behind the implementation of the `nim` with `minmax` there is the basic structure of the algorithm `minmax`:
+
+```
+def minimax(currentpos,depth,maximizingplayer):
+    if depth==0:
+        return currentpos
+    if maximizingplayer: #we want to get the max
+        maxEval=-infinity
+        for each child of position
+            eval=minimax(child,depth-1,false)
+            maxEval=max(maxEval,eval)
+        return maxEval
+
+    else
+        minEval=+infinity
+        for each child of position
+            eval=minimax(minEval,eval)
+            minEval=min(minEval,eval)
+        return minEval
+```
+
+There are few main solutions:
+- `possible_new_states`: understand the next state
+- `evaluate`: understand if the game is over
+- `possible_moves`: calculate all the moves for the program
+
+### **Alpha Beta Pruning**
+
+Basically you consider branches from left to right and sto exploring subtrees once the minimax score of a node is decided. In this way the game become much smaller. 
+
+Alpha-beta pruning is a search algorithm that seeks to decrease the number of nodes that are evaluated by the minmax algorithm. 
+
+To implement the algorithm we refactored the `minimax()` function and add a criterion to the to know when we can stop exploring:
+
+- `alpha`: will represent the minimum score that the maximizing player is ensured.
+- `beta`: will represent the maximum score that the minimizing player is ensured.
+
+```
+if beta < alpha: stop exploring -> means that the minimax has already found a better option
+```
+
+This is implemented with an explicit `for` loop. The scores of child nodes are in the `scores` variable. Also, each `minimax()` iteration, `alpha` and `beta` are changed:
+
+```
+if is_maximizing:
+            alpha = max(alpha, score)
+        else:
+            beta = min(beta, score)
+```
+
+Note that this is only optimization and does not change the output of the minmax algorithm, so the results are the same. We can also see that the execution time is better with the alpha-beta pruning.
+
+| **Alpha** | **Beta** | **Time**             |
+|-----------|----------|----------------------|
+| -1        | 1        | 0.08599638938903809  |
+| -0.5      | 1        | 0.033998727798461914 |
+| -0.5      | 0.5      | 0.06699728965759277  |
+| -1        | 0.5      | 0.053972721099853516 |
+
+Minmax strategy always wins.
+
+Theory and part of the code: https://realpython.com/python-minimax-nim/#lose-the-game-of-nim-against-a-python-minimax-player
+
+Theory about ALpha-beta pruning: https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
+
 ## Task 3.4 - Reinforcement Learning
 We have considered Q-learning and we have taken inspiration to bblais' Game setups.
 
-Our accuracies are sampled and calculated for each 100 games.
+Our accuracies are sampled and calculated for each 100 games, and for 5 heaps only (we haven't trained for greater heaps since [[1]](#references) showed improving with RL for h=5 but a worsening of winrate for greater heaps, but feel free to play with hyperparams and `nim_size`!).
 
 We have used three hyperparameters:
 - `alpha`: learning rate
-- `gamma`: memory multiplicator
+- `gamma`: memory multiplier
 - `epsilon`: the chance of making a random move
 
-|`alpha`|`gamma`|`epsilon`|
-|-------|-------|---------|
-|  0.3  |  0.9  |   0.1   |
+| `alpha` | `gamma` | `epsilon` |
+|---------|---------|-----------|
+| 0.3     | 0.9     | 0.1       |
 
-Despite of the previous methods, this requires many iteration to reach a sort of convergence. That's why we have iterated among 5000 games, and we have reached a suboptimal result against `gabriele` of 98% after 3500 iterations.
+Despite the previous methods, this requires many iteration to reach a sort of convergence. That's why we have iterated among 5000 games, and we have reached a suboptimal result against `gabriele` of 98% after 3500 iterations, even if it is unstable.
 
 For what concerns our RL agent against `optimal_strategy`, there is a plateau due to continue loses of our agent, but this situation changes after almost 3kth iteration. 
 It has turned out that for 10k iterations the max accuracy still increases, so we enhanced the iterations up to 30k and we obtained a max winrate of 81% after 28100 iterations. 
 
-Please note: these values are mutable and they have to be considered as an approximation.
+After that, we wanted to test again our agent against `gabriele` using pretrained data from previous training against `optimal_strategy`, and the curve is significantly improved at the beginning.
 
-References: [Bblais'Game](https://github.com/bblais/Game)
+**Please note**: these values are mutable and they have to be considered as an approximation.
 
+### References: 
+- [Bblais'Game](https://github.com/bblais/Game)
+- [1]: [Impartial Games: A challenge for Reinforcement Learning](https://arxiv.org/pdf/2205.12787.pdf)
 # **Results**
 
 These results are calculated over 100 games on average.
@@ -95,10 +165,12 @@ These results are calculated over 100 games on average.
 | strategy_1          | strategy_0            | 80%                    |
 
 Results for Q-learning agent:
+
 | **Opponent strategy** | **Average Win Rate %** | **Average iterations** |
 |-----------------------|------------------------|------------------------|
-| gabriele              | 98%                    | 3500                   |
-| pure random           | 81%                    | 28100                  |
+| gabriele              | 99%                    | 20600                  |
+| pure random           | 84%                    | 20200                  |
+| gabriele (with pretraining data) | 99%         | 29100                  |
 
 # **Collaborators**
 - s296138 Carachino Alessio
