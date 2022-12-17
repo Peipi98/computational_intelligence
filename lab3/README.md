@@ -1,4 +1,4 @@
-# Lab 3 - Giuseppe Atanasio
+# Lab 3 - Alessio Carachino
 
 You can find the solution in the `taskN_lib` for each task.
 
@@ -136,12 +136,12 @@ We have used three hyperparameters:
 |---------|---------|-----------|
 | 0.3     | 0.9     | 0.1       |
 
-Despite the previous methods, this requires many iteration to reach a sort of convergence. That's why we have iterated among 5000 games, and we have reached a suboptimal result against `gabriele` of 99% after 20600 iterations, even if it is unstable.
+Despite the previous methods, this requires many iteration to reach a sort of convergence. That's why we have iterated among 5000 games, and we have reached a suboptimal result against `pure_random` of 99% after 20600 iterations, even if it is unstable.
 
 For what concerns our RL agent against `optimal_strategy`, there is a plateau due to continue loses of our agent, but this situation changes after almost 3kth iteration. 
 It has turned out that for 10k iterations the max accuracy still increases, so we enhanced the iterations up to 30k and we obtained a max winrate of 84% after 20200 iterations. 
 
-After that, we wanted to test again our agent against `gabriele` using pretrained data from previous training against `optimal_strategy`, and the curve is significantly improved at the beginning.
+After that, we wanted to test again our agent against `pure_random` using pretrained data from previous training against `optimal_strategy`, and the curve is significantly improved at the beginning.
 
 **Please note**: these values are mutable and they have to be considered as an approximation.
 
@@ -168,9 +168,9 @@ Results for Q-learning agent:
 
 | **Opponent strategy** | **Average Win Rate %** | **Average iterations** |
 |-----------------------|------------------------|------------------------|
-| gabriele              | 99%                    | 20600                  |
-| pure random           | 84%                    | 20200                  |
-| gabriele (with pretraining data) | 99%         | 29100                  |
+| pure random              | 99%                    | 20600                  |
+| optimal           | 84%                    | 20200                  |
+| pure random (with pretraining data) | 99%         | 29100                  |
 
 # **Collaborators**
 - s296138 Carachino Alessio
